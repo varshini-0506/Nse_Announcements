@@ -35,6 +35,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY app.py .
+COPY start.sh .
+
+# Make startup script executable
+RUN chmod +x start.sh
 
 # Expose port (Railway typically uses 8080)
 EXPOSE 8080
@@ -43,6 +47,6 @@ EXPOSE 8080
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=app.py
 
-# Run the application with Gunicorn
-CMD ["gunicorn", "app:app", "--workers=2", "--threads=4", "--bind=0.0.0.0:${PORT:-8080}"]
+# Run the application with Gunicorn using startup script
+CMD ["./start.sh"]
 
